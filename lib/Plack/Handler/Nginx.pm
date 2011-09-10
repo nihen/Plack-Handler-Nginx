@@ -37,17 +37,7 @@ sub psgi_handler {
     my $app = load_app($r->variable('psgi'));
 
     my $env = {
-        REQUEST_METHOD      => $r->request_method,
-        SCRIPT_NAME         => '',
-        PATH_INFO           => $r->uri,
-        REQUEST_URI         => $r->variable('request_uri'),
-        QUERY_STRING        => defined $r->args ? $r->args : '',
-        SERVER_NAME         => $r->variable('server_addr'),
-        SERVER_PORT         => $r->variable('server_port'),
-        SERVER_PROTOCOL     => $r->variable('server_protocol'),
-        REMOTE_ADDR         => $r->remote_addr,
         'psgi.version'      => [1, 1],
-        'psgi.url_scheme'   => $r->variable('scheme'),
         'psgi.input'        => $input,
         'psgi.errors'       => *STDERR,
         'psgi.multithread'  => Plack::Util::FALSE,
@@ -56,7 +46,7 @@ sub psgi_handler {
         'psgi.nonblocking'  => Plack::Util::TRUE,
         'psgi.streaming'    => Plack::Util::TRUE,
     };
-    if ( ngx_plack_handler_http_header_set($r, $env) != 0 ) {
+    if ( ngx_psgi_env_set_per_request($r, $env) != 0 ) {
         warn("http_header_set fail");
         return HTTP_INTERNAL_SERVER_ERROR;
     }
@@ -130,6 +120,7 @@ sub write_response_header {
     $r->status($res->[0]);
 
     my $content_type = '';
+
     Plack::Util::header_iter($res->[1], sub {
         if ( uc $_[0] eq 'CONTENT-TYPE' ) {
             $content_type = $_[1];
