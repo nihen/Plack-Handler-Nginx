@@ -185,9 +185,15 @@ Masahiro Chiba
 
 L<Plack>
 
+ngx_mod_psgi: L<https://github.com/yko/ngx_mod_psgi>
+
+nginx-psgi-patchs: L<https://github.com/yappo/nginx-psgi-patchs>
+
 =cut
 
 =head1 LICENSE
+
+This module uses code from L<HTTP::Parser::XS>, nginx-psgi-patchs L<https://github.com/yappo/nginx-psgi-patchs> and ngx_mod_psgi L<https://github.com/yko/ngx_mod_psgi>.
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
