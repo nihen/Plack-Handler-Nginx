@@ -45,6 +45,7 @@ sub psgi_handler {
         'psgi.run_once'     => Plack::Util::FALSE,
         'psgi.nonblocking'  => Plack::Util::TRUE,
         'psgi.streaming'    => Plack::Util::TRUE,
+        'psgix.nginx_request' => $r,
     };
     if ( ngx_psgi_env_set_per_request($r, $env) != 0 ) {
         warn("http_header_set fail");
